@@ -22,20 +22,26 @@ def run_game():
     for turn in range(9):
         if turn % 2 == 0:
             while True:
-                position = int(input("P1 Pick a position: "))
-                if board[position - 1] in ["x", "o"]:
-                    print("That spot is taken!")
-                else:
-                    board[position - 1] = p1
-                    break
+                try:
+                    position = int(input("P1 Pick a position: "))
+                    if board[position - 1] in ["x", "o"]:
+                        print("That spot is taken!")
+                    else:
+                        board[position - 1] = p1
+                        break
+                except:
+                    print("Numbers only! Pick a number 1-9!")
         else:
             while True:
-                position = int(input("P2 Pick a position: "))
-                if board[position - 1] in ["x", "o"]:
-                    print("That spot is taken!")
-                else:
-                    board[position - 1] = p2
-                    break
+                try:
+                    position = int(input("P2 Pick a position: "))
+                    if board[position - 1] in ["x", "o"]:
+                        print("That spot is taken!")
+                    else:
+                        board[position - 1] = p2
+                        break
+                except:
+                    print("Numbers only! Pick a number 1-9!")
         print_board()
         winner = check_winner()
         if winner:
