@@ -1,5 +1,7 @@
 import colorama
 board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+p1_wins = 0
+p2_wins = 0
 def print_board():
     print(board[0], "|", board[1], "|", board[2])
     print("---------")
@@ -7,10 +9,16 @@ def print_board():
     print("---------")
     print(board[6], "|", board[7], "|", board[8])
 
+
 def run_game():
     global board
+    global p1_wins, p2_wins
     board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    p1 = input("P1 Choose x|o: ").lower()
+    while True:
+        p1 = input("P1 Choose x|o: ").lower()
+        if p1 in ["x", "o"]:
+            break
+        print("Choose x or o only!")
     if p1 == "x":
         p2 = "o"
         print("P2 you are o")
@@ -50,6 +58,11 @@ def run_game():
         winner = check_winner()
         if winner:
             print(f"{winner} wins!")
+            if winner == p1:
+                p1_wins += 1
+            elif winner == p2:
+                p2_wins += 1
+            print(f"Score -- P1: {p1_wins} | P2: {p2_wins}")
             break
     if not winner:
         print("It's a draw!")
