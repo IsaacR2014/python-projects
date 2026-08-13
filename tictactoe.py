@@ -24,7 +24,9 @@ def run_game():
             while True:
                 try:
                     position = int(input("P1 Pick a position: "))
-                    if board[position - 1] in ["x", "o"]:
+                    if position < 1 or position > 9:
+                        print("Pick a number between 1 and 9!")
+                    elif board[position - 1] in ["x", "o"]:
                         print("That spot is taken!")
                     else:
                         board[position - 1] = p1
@@ -35,7 +37,9 @@ def run_game():
             while True:
                 try:
                     position = int(input("P2 Pick a position: "))
-                    if board[position - 1] in ["x", "o"]:
+                    if position < 1 or position > 9:
+                        print("Pick a number between 1 and 9!")
+                    elif board[position - 1] in ["x", "o"]:
                         print("That spot is taken!")
                     else:
                         board[position - 1] = p2
