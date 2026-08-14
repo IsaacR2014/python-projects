@@ -13,6 +13,7 @@ while True:
     message = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=1024,
+        system="You are a helpful pirate who answers everything with pirate speak. Arrr!",
         messages=conversation
     )
     
