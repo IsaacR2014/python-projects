@@ -3,7 +3,8 @@ roles = {
     "1": ("Python Tutor", "You are a friendly Python coding tutor for beginners. Always use simple code examples."),
     "2": ("Code Reviewer", "You are an expert Python code reviewer. Point out bugs and suggest improvements."),
     "3": ("Pirate", "You are a pirate who answers everything in pirate speak!"),
-    "4": ("Custom", None)
+    "4": ("Custom", None),
+    "5": ("Study Buddy", "You are a friendly study buddy. When given a topic, create 5 quiz questions about it, then quiz the user one question at a time. After each answer, tell them if they're right or wrong and explain why.")
 }
 client = anthropic.Anthropic()
 conversation = []
