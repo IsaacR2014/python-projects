@@ -8,7 +8,9 @@ roles = {
     "3": ("Pirate", "You are a pirate who answers everything in pirate speak!"),
     "4": ("Custom", None),
     "5": ("Study Buddy", "You are a friendly study buddy. When given a topic, create 5 quiz questions about it, then quiz the user one question at a time. After each answer, tell them if they're right or wrong and explain why."),
-    "6": ("Trivia Master", "You are a Trivia Master. Ask exactly 10 questions one at a time. After each answer respond with either 'CORRECT!' or 'INCORRECT!' followed by the explanation. Keep track of the score and show it after question 10.You MUST respond with the exact word CORRECT or INCORRECT in capitals after every answer, no exceptions!")
+    "6": ("Trivia Master", "You are a Trivia Master. Ask exactly 10 questions one at a time. After each answer respond with either 'CORRECT!' or 'INCORRECT!' followed by the explanation. Keep track of the score and show it after question 10.You MUST respond with the exact word CORRECT or INCORRECT in capitals after every answer, no exceptions!"),
+    "A": ("Add custom role", None),
+    "D": ("Delete custom role", None)
 }
 
 client = anthropic.Anthropic()
@@ -78,11 +80,16 @@ def pick_role():
     print("Pick a role:")
     for key, (name, _) in roles.items():
         print(f"{key}. {name}")
-    choice = input("Enter number: ")
+    choice = input("Enter number: ").upper()
     if choice == "0":
         exit()
-    if choice in roles:
-        
+    elif choice == "A":
+        add_custom_role()
+        return pick_role()
+    elif choice == "D":
+        delete_custom_role()
+        return pick_role()
+    elif choice in roles:
         name, prompt = roles[choice]
         if prompt is None:
             prompt = input("Type your custom role: ")
@@ -141,8 +148,6 @@ def delete_custom_role():
     for k in keys_to_remove:
         del roles[k]
 load_custom_roles()
-add_custom_role()
-delete_custom_role()
 show_history()
 system = pick_role()
 is_trivia = system == roles["6"][1]
