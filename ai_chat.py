@@ -26,7 +26,33 @@ def show_history():
         clear = input("Clear chat history? yes/no: ").lower()
         if clear == "yes":
             open("chat_history.txt", "w").close()
-    clear_leaderboard()  # add this line at the end!
+    clear_leaderboard()  
+def load_custom_roles():
+    try:
+        with open("custom_roles.json", "r") as f:
+            custom = json.load(f)
+        for role in custom:
+            key = str(len(roles))
+            roles[key] = (role["name"], role["prompt"])
+    except:
+        pass  
+def add_custom_role():
+    confirmation = input("Add a custom role? yes/no: ").lower()
+    if confirmation == "yes":
+        name = input("Role name: ")
+        prompt = input("Role prompt: ")
+        try:
+            with open("custom_roles.json", "r") as f:
+                custom = json.load(f)
+        except:
+            custom = []
+        custom.append({"name": name, "prompt": prompt})
+        with open("custom_roles.json", "w") as f:
+            json.dump(custom, f)
+        key = str(len(roles))
+        roles[key] = (name, prompt)
+        print(f"Role '{name}' added!")
+
 
 def clear_leaderboard():
     try:
@@ -82,6 +108,41 @@ def save_score_to_leaderboard(name, score):
     print("🏆 LEADERBOARD 🏆")
     for i, entry in enumerate(leaderboard, 1):
         print(f"{i}. {entry['name']}: {entry['score']}")
+def delete_custom_role():
+    try:
+        with open("custom_roles.json", "r") as f:
+            custom = json.load(f)
+        if not isinstance(custom, list):
+            custom = []
+    except:
+        custom = []
+    
+    if not custom:
+        print("No custom roles to delete!")
+        return
+    
+    print("Custom roles:")
+    for i, role in enumerate(custom, 1):
+        print(f"{i}. {role['name']}")
+    
+    choice = input("Delete which number? (or press Enter to skip): ")
+    if choice == "":
+        return
+    try:
+        choice = int(choice) - 1
+        removed = custom.pop(choice)
+        print(f"Deleted: {removed['name']}")
+        with open("custom_roles.json", "w") as f:
+            json.dump(custom, f)
+        load_custom_roles()
+    except:
+        print("Invalid choice!")
+    keys_to_remove = [k for k in roles if int(k) >= 7]
+    for k in keys_to_remove:
+        del roles[k]
+load_custom_roles()
+add_custom_role()
+delete_custom_role()
 show_history()
 system = pick_role()
 is_trivia = system == roles["6"][1]
