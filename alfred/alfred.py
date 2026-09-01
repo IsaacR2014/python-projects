@@ -1,4 +1,5 @@
 import json
+import anthropic
 from datetime import date
 def load_habits():
     try:
@@ -46,6 +47,7 @@ def run_alfred():
         print("2. Add habit")
         print("3. Check in")
         print("4. Quit")
+        print("5. Talk to Alfred")
         choice = input("Choose: ")
         if choice == "1":
             view_habits(habits)
@@ -56,5 +58,29 @@ def run_alfred():
         elif choice == "4":
             print("See you tomorrow! 💪")
             break
+        elif choice == "5":
+            talk_to_alfred(habits)
+def talk_to_alfred(habits):
+    client = anthropic.Anthropic()
+    conversation = []
+    system = f"You are Alfred, a supportive life coach AI. The user's current habits and streaks are: {habits}. Use this to motivate them. Be encouraging and positive!"
+    print("Alfred: Hi! I'm Alfred your personal coach! Type 'bye' to exit.")
+    while True:
+        msg = input("You: ")
+        if msg.strip() == "":
+            continue
+        if msg.lower() == "bye":
+            print("Alfred: See you tomorrow! Keep it up! 💪")
+            break
+        conversation.append({"role": "user", "content": msg})
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1024,
+            system=system,
+            messages=conversation
+        )
+        reply = response.content[0].text
+        print(f"Alfred: {reply}")
+        conversation.append({"role": "assistant", "content": reply})
 
 run_alfred()
