@@ -32,10 +32,14 @@ def check_in(habits):
     view_habits(habits)
     choice = int(input("Which habit did you complete? (enter number): ")) - 1
     if 0 <= choice < len(habits):
-        habits[choice]["streak"] += 1
-        habits[choice]["last_checked"] = str(date.today())
-        save_habits(habits)
-        print(f"✅ Great job! {habits[choice]['name']} streak: {habits[choice]['streak']} days!")
+        today = str(date.today())
+        if habits[choice]["last_checked"] == today:
+            print("Already checked in today! Come back tomorrow! 😄")
+        else:
+            habits[choice]["streak"] += 1
+            habits[choice]["last_checked"] = today
+            save_habits(habits)
+            print(f"✅ Great job! {habits[choice]['name']} streak: {habits[choice]['streak']} days!")
     else:
         print("Invalid choice!")
     return habits
@@ -48,6 +52,8 @@ def run_alfred():
         print("3. Check in")
         print("4. Quit")
         print("5. Talk to Alfred")
+        print("6. Uncheck a habit")
+        print("7. Delete alfreds chat history")
         choice = input("Choose: ")
         if choice == "1":
             view_habits(habits)
@@ -60,7 +66,13 @@ def run_alfred():
             break
         elif choice == "5":
             talk_to_alfred(habits)
+        elif choice == "6":
+            habits = uncheck_habit(habits)
+        elif choice == "7":
+            show_history()
+        
 def talk_to_alfred(habits):
+    show_history()
     client = anthropic.Anthropic()
     conversation = []
     system = f"You are Alfred, a supportive life coach AI. The user's current habits and streaks are: {habits}. Use this to motivate them. Be encouraging and positive!"
@@ -71,16 +83,50 @@ def talk_to_alfred(habits):
             continue
         if msg.lower() == "bye":
             print("Alfred: See you tomorrow! Keep it up! 💪")
+            save_history(conversation)
             break
         conversation.append({"role": "user", "content": msg})
         response = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=1024,
             system=system,
-            messages=conversation
+            messages=conversation[-10:]
         )
         reply = response.content[0].text
         print(f"Alfred: {reply}")
         conversation.append({"role": "assistant", "content": reply})
+def uncheck_habit(habits):
+    view_habits(habits)
+    choice = int(input("Which habit to uncheck? (enter number): ")) - 1
+    if 0 <= choice < len(habits):
+        if habits[choice]["last_checked"] == str(date.today()):
+            habits[choice]["streak"] -= 1
+            habits[choice]["last_checked"] = None
+            save_habits(habits)
+            print(f"↩️ Unchecked {habits[choice]['name']}!")
+        else:
+            print("This habit wasn't checked today!")
+    else:
+        print("Invalid choice!")
+    return habits
+def show_history():
+    with open("alfred_history.txt", "a") as f:
+        pass
+    with open("alfred_history.txt", "r") as f:
+        history = f.read()
+    if history:
+        view = input("View chat history? yes/no: ").lower()
+        if view == "yes":
+            print(history)
+        clear = input("Clear chat history? yes/no: ").lower()
+        if clear == "yes":
+            open("alfred_history.txt", "w").close()
+def save_history(conversation):
+    with open("alfred_history.txt", "a") as f:
+        for msg in conversation:
+            if msg["role"] == "user":
+                f.write(f"You: {msg['content']}\n")
+            else:
+                f.write(f"Claude: {msg['content']}\n")
 
 run_alfred()
