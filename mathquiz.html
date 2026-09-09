@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Quiz</title>
+    <style>
+    body {
+        background-color: black;
+        color: white;
+        font-family: Arial;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+    button {
+        background-color: #333;
+        color: white;
+        border: 2px solid white;
+        padding: 15px 30px;
+        font-size: 20px;
+        margin: 10px;
+        cursor: pointer;
+    }
+    #question {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
+    button:hover {
+    background-color: #555;
+    border-color: yellow;
+    }
+</style>
+</head>
+<body>
+    <div id="question">What is java + bedrock</div>
+<div id="choices">
+    <button id="choice0" onclick="checkAnswer(currentQuestion.choices[0])">A</button>
+    <button id="choice1" onclick="checkAnswer(currentQuestion.choices[1])">B</button>
+    <button id="choice2" onclick="checkAnswer(currentQuestion.choices[2])">C</button>
+    <button id="choice3" onclick="checkAnswer(currentQuestion.choices[3])">D</button>
+</div>
+<div id="score">Score: 0</div>
+    <script>
+    let currentQuestion;
+    wrong1 = 0
+    wrong2 = 0
+    function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+    function generateQuestion(difficulty) {
+    let num1, num2, operation, answer;
+    if (difficulty === "easy") {
+        num1 = Math.floor(Math.random() * 10) + 1;
+        num2 = Math.floor(Math.random() * 10) + 1;
+        let operations = ["+", "-", "*"];
+        let choice = Math.floor(Math.random() * 3)
+        operation = operations[choice]
+    }
+    if (operation === "+") {
+        answer = num1 + num2 
+    }
+    else if (operation === "-") {
+        answer = num1 - num2 
+    }
+    else if (operation === "*") {
+        answer = num1 * num2
+    }
+    let choices = shuffle([answer].concat(generateWrongAnswers(answer)));
+    return {
+    question: `What is ${num1} ${operation} ${num2}?`,
+    correct: answer,
+    choices: choices
+    }
+    }
+    function generateWrongAnswers(correct) {
+    let wrongs = [];
+    while (wrongs.length < 3) {
+        let offset = Math.floor(Math.random() * 10) + 1;
+        let flip = Math.floor(Math.random() * 2) + 1;
+        let wrong;
+        if (flip === 1) {
+            wrong = correct + offset;
+        } else {
+            wrong = correct - offset;
+        }
+        if (wrong !== correct && !wrongs.includes(wrong)) {
+            wrongs.push(wrong);
+        }
+    }
+    return wrongs;
+}
+function displayQuestion() {
+    currentQuestion = generateQuestion("easy");
+    document.getElementById("question").innerText = currentQuestion.question;
+    document.getElementById("choice0").innerText = currentQuestion.choices[0];
+    document.getElementById("choice1").innerText = currentQuestion.choices[1];
+    document.getElementById("choice2").innerText = currentQuestion.choices[2];
+    document.getElementById("choice3").innerText = currentQuestion.choices[3];
+}
+displayQuestion();
+    function checkAnswer(selected){
+    if (selected === currentQuestion.correct) {
+        alert("Correct! :D")
+    }
+    else{
+        alert("Wrong X_X")
+    }
+}
+    </script>
+</body>

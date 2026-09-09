@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Page</title>
+    <script>
+    function buttonClicked() {
+        alert("You clicked me! 😄");
+    }
+</script>
+<style>
+    body {
+        background-color: black;
+        color: white;
+        font-family: Arial;
+    }
+    h1 {
+        color: orange;
+        font-size: 60px;
+    }
+    p {
+        font-size: 20px;
+        margin: 20px;
+    }
+    a {
+        color: orange;
+        text-decoration: none;
+    }
+    ul {
+        background-color: #333;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    button {
+        background-color: orange;
+        color: black;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+}
+button:hover {
+    background-color: white;
+    color: orange;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+.container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+.box {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+</style>
+</head>
+<body>
+    <h1>Isaac Python Developer | Age 12</h1>
+    <p>Learning to code and building real projects!</p>
+    <a href="https://github.com/IsaacR2014">Click here</a>
+    <button onclick="window.location.href='https://github.com/IsaacR2014'">View My GitHub</button>
+<div class="container">
+    <div class="box">
+        <h3>Math Quiz Game</h3>
+        <p>A math quiz with difficulty levels and high scores!</p>
+        <button onclick="window.location.href='https://github.com/IsaacR2014/python-projects'">View on GitHub</button>
+    </div>
+    <div class="box">
+        <h3>Tic Tac Toe</h3>
+        <p>Two player tic tac toe with win detection!</p>
+        <button onclick="window.location.href='https://github.com/IsaacR2014/python-projects'">View on GitHub</button>
+    </div>
+    <div class="box">
+        <h3>Alfred</h3>
+        <p>AI powered habit tracker with streak tracking!</p>
+        <button onclick="window.location.href='https://github.com/IsaacR2014/python-projects'">View on GitHub</button>
+    </div>
+</body>
+</html>
