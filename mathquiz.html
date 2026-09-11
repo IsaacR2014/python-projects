@@ -43,7 +43,10 @@
 </div>
 <div id="score">Score: 0</div>
     <script>
+    let score = 0
+    let gameOver = false;
     let currentQuestion;
+    let question_counter = 0
     wrong1 = 0
     wrong2 = 0
     function shuffle(array) {
@@ -106,12 +109,21 @@ function displayQuestion() {
     document.getElementById("choice3").innerText = currentQuestion.choices[3];
 }
 displayQuestion();
-    function checkAnswer(selected){
+function checkAnswer(selected) {
+    if (gameOver) return;
     if (selected === currentQuestion.correct) {
-        alert("Correct! :D")
+        alert("Correct! :D");
+        score++
+        document.getElementById("score").innerText = "Score: " + score
+    } else {
+        alert("Wrong X_X");
     }
-    else{
-        alert("Wrong X_X")
+    question_counter++;
+    if (question_counter === 10) {
+        alert("Game Over!");
+        gameOver = true
+    } else {
+        displayQuestion();
     }
 }
     </script>
