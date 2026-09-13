@@ -10,6 +10,17 @@ def load_habits():
 def save_habits(habits):
     with open("habits.json", "w") as f:
         json.dump(habits, f)
+def check_streaks(habits):
+    today = date.today()
+    for habit in habits:
+        if habit["last_checked"] is not None:
+            last_date = date.fromisoformat(habit["last_checked"])
+            difference = today - last_date
+            if difference.days >= 2:
+                habit["streak"] = 0
+                habit["last_checked"] = None
+                save_habits(habits)
+    return habits
 
 def add_habit(habits):
     name = input("What will the name of your habit be? ")
@@ -30,7 +41,11 @@ def view_habits(habits):
             print(f"{i}. {habit['name']} - 💀 No streak yet")
 def check_in(habits):
     view_habits(habits)
-    choice = int(input("Which habit did you complete? (enter number): ")) - 1
+    try:
+        choice = int(input("Which habit did you complete? (enter number): ")) - 1
+    except ValueError:
+        print("Numbers only!")
+        return habits
     if 0 <= choice < len(habits):
         today = str(date.today())
         if habits[choice]["last_checked"] == today:
@@ -43,8 +58,23 @@ def check_in(habits):
     else:
         print("Invalid choice!")
     return habits
+def delete_habit(habits):
+    view_habits(habits)
+    try:
+        bork = int(input("Choose one to remove: ")) - 1
+    except ValueError:
+        print("Numbers only!")
+        return habits
+    if 0 <= bork < len(habits):
+        habits.pop(bork)
+        save_habits(habits)
+        print("Habit deleted!")
+    else:
+        print("Invalid ch0ice!")
+    return habits
 def run_alfred():
     habits = load_habits()
+    habits = check_streaks(habits)
     print("👋 Welcome to Alfred!")
     while True:
         print("\n1. View habits")
@@ -54,6 +84,7 @@ def run_alfred():
         print("5. Talk to Alfred")
         print("6. Uncheck a habit")
         print("7. Delete alfreds chat history")
+        print("8. Delete a habit")
         choice = input("Choose: ")
         if choice == "1":
             view_habits(habits)
@@ -70,7 +101,10 @@ def run_alfred():
             habits = uncheck_habit(habits)
         elif choice == "7":
             show_history()
-        
+        elif choice == "8":
+            habits = delete_habit(habits)
+
+
 def talk_to_alfred(habits):
     show_history()
     client = anthropic.Anthropic()
@@ -97,7 +131,11 @@ def talk_to_alfred(habits):
         conversation.append({"role": "assistant", "content": reply})
 def uncheck_habit(habits):
     view_habits(habits)
-    choice = int(input("Which habit to uncheck? (enter number): ")) - 1
+    try:
+        choice = int(input("Which habit to uncheck? (enter number): ")) - 1
+    except ValueError:
+        print("Numbers only!")
+        return habits
     if 0 <= choice < len(habits):
         if habits[choice]["last_checked"] == str(date.today()):
             habits[choice]["streak"] -= 1
