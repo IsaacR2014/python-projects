@@ -8,7 +8,9 @@
         color: white;
         font-family: Arial;
         text-align: center;
+        
     }
+    
     #board {
         display: grid;
         grid-template-columns: repeat(3, 100px);
@@ -32,6 +34,8 @@
     }
 </style>
     <script>
+    let oWins = 0
+    let xWins = 0
     let board = ["", "", "", "", "", "", "", "", ""];
     let currentPlayer = "X";
     let gameOver = false;
@@ -41,15 +45,21 @@
         board[index] = currentPlayer;
         document.querySelectorAll(".cell")[index].textContent = currentPlayer;
         
-        if (checkWinner()) {
-            document.getElementById("status").textContent = currentPlayer + " wins!";
-            gameOver = true;
-        } else if (board.every(cell => cell !== "")) {
-            document.getElementById("status").textContent = "It's a draw!";
-        } else {
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            document.getElementById("status").textContent = "Player " + currentPlayer + "'s turn";
-        }
+if (checkWinner()) {
+    document.getElementById("status").textContent = currentPlayer + " wins!";
+    gameOver = true;
+    if (currentPlayer === "X") {
+        xWins++
+    } else {
+        oWins++
+    }
+    document.getElementById("scores").innerText = "X: " + xWins + " | O: " + oWins;
+} else if (board.every(cell => cell !== "")) {
+    document.getElementById("status").textContent = "It's a draw!";
+} else {
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    document.getElementById("status").textContent = "Player " + currentPlayer + "'s turn";
+}
     }
     function checkWinner() {
     const wins = [
@@ -79,6 +89,7 @@ function resetGame() {
 </head>
 <body>
     <h1>Tic Tac Toe</h1>
+    <div id="scores">X: 0 | O: 0</div>
     <div id="board">
         <div class="cell" onclick="makeMove(0)"></div>
         <div class="cell" onclick="makeMove(1)"></div>
