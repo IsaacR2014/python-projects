@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Alfred</title>
+    <style>
+        body {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    text-align: center;
+}
+button {
+    background-color: #333;
+    color: white;
+    border: 2px solid white;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #555;
+    border-color: yellow;
+}
+input {
+    background-color: #333;
+    color: white;
+    border: 2px solid white;
+    padding: 10px;
+    font-size: 16px;
+}
+    </style>
+
+</head>
+<body>
+    <h1>Alfred</h1>
+    
+    <div id="habits">
+        <h2>Your Habits</h2>
+    </div>
+
+    <div id="checkin">
+    </div>
+
+    <div id="chat">
+        <h2>Talk to Alfred</h2>
+        <input type="text" placeholder="Type a message...">
+        <button>Send</button>
+        <div id="chatbox"></div>
+    </div>
+    <script>
+    let habits = [
+    {name: "moggingmax", streak: 2},
+    {name: "coding", streak: 5}
+];
+
+function displayHabits() {
+    let habitDiv = document.getElementById("habits");
+    habitDiv.innerHTML = "<h2>Your Habits</h2>";
+    for (let habit of habits) {
+        habitDiv.innerHTML += `<p>${habit.name} - 🔥 ${habit.streak} day streak <button onclick="checkIn(${habits.indexOf(habit)})">Check In</button></p>`;
+    }
+}
+function checkIn(index) {
+    let today = new Date().toISOString().split('T')[0];
+    if (habits[index].last_checked === today) {
+        alert("Already checked in today!");
+    } else {
+        habits[index].streak++;
+        habits[index].last_checked = today;
+        displayHabits();
+    }
+}
+
+displayHabits();
+</script>
+</body>
+</html>
