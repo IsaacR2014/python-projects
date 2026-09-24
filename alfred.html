@@ -31,11 +31,11 @@ input {
     font-size: 16px;
 }
     </style>
-
 </head>
+
 <body>
     <h1>Alfred</h1>
-    
+    <button onclick="addHabit()">+ Add Habit</button>
     <div id="habits">
         <h2>Your Habits</h2>
     </div>
@@ -50,16 +50,13 @@ input {
         <div id="chatbox"></div>
     </div>
     <script>
-    let habits = [
-    {name: "moggingmax", streak: 2},
-    {name: "coding", streak: 5}
-];
+    let habits = [];
 
 function displayHabits() {
     let habitDiv = document.getElementById("habits");
     habitDiv.innerHTML = "<h2>Your Habits</h2>";
     for (let habit of habits) {
-        habitDiv.innerHTML += `<p>${habit.name} - 🔥 ${habit.streak} day streak <button onclick="checkIn(${habits.indexOf(habit)})">Check In</button></p>`;
+        habitDiv.innerHTML += `<p>${habit.name} - 🔥 ${habit.streak} day streak <button onclick="checkIn(${habits.indexOf(habit)})">Check In</button> <button onclick="deleteHabit(${habits.indexOf(habit)})">Delete</button> <button onclick="uncheck(${habits.indexOf(habit)})">uncheck</button></p>`;
     }
 }
 function checkIn(index) {
@@ -72,7 +69,40 @@ function checkIn(index) {
         displayHabits();
     }
 }
-
+function addHabit() {
+    let name = prompt("What's the habit name?");
+    if (!name) return;
+    if (habits.length >= 12) {
+    alert("Habit limit reached!")
+    displayHabits();
+    }
+    else if (habits.find(h => h.name === name)) {
+    alert("That habits taken!")
+    }
+    else if (name.length > 100) {
+    alert("Name too long! Max 100 characters.");
+}
+    else{
+    habits.push({name: name, streak: 0, last_checked:null})
+    displayHabits();
+    }
+    
+}
+function uncheck(index) {
+    let bork = new Date().toISOString().split('T')[0];
+    if (habits[index].last_checked === bork) {
+       habits[index].streak--;
+       habits[index].last_checked = null 
+       displayHabits();
+    } else {
+        alert("You havent checked in today")
+        displayHabits();
+    }
+}
+function deleteHabit(index) {
+    habits.splice(index, 1);
+    displayHabits()
+}
 displayHabits();
 </script>
 </body>
