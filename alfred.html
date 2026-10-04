@@ -45,13 +45,18 @@ input {
 
     <div id="chat">
         <h2>Talk to Alfred</h2>
-        <input type="text" placeholder="Type a message...">
-        <button>Send</button>
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button onclick="sendmessage()">Send</button>
+        <button onclick="clearChat()">Clear Chat</button>
         <div id="chatbox"></div>
     </div>
     <script>
+    
     let habits = [];
 
+    function clearChat() {
+    document.getElementById("chatbox").innerHTML = "";
+}
 function displayHabits() {
     let habitDiv = document.getElementById("habits");
     habitDiv.innerHTML = "<h2>Your Habits</h2>";
@@ -87,6 +92,20 @@ function addHabit() {
     displayHabits();
     }
     
+}
+function sendmessage() {
+    let message = document.getElementById("chatInput").value;
+    document.getElementById("chatbox").innerHTML += `<p>You: ${message}</p>`;
+    document.getElementById("chatInput").value = "";
+    fetch('http://localhost:5000/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: message, habits: habits})
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("chatbox").innerHTML += `<p>Alfred: ${data.reply}</p>`;
+    });
 }
 function uncheck(index) {
     let bork = new Date().toISOString().split('T')[0];
