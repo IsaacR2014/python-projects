@@ -48,15 +48,32 @@ input {
         <input type="text" id="chatInput" placeholder="Type a message...">
         <button onclick="sendmessage()">Send</button>
         <button onclick="clearChat()">Clear Chat</button>
+        <button onclick="deletememory()">Delete Chat</button>
         <div id="chatbox"></div>
     </div>
     <script>
     
-    let habits = [];
+    let habits = JSON.parse(localStorage.getItem("habits")) || [];
 
     function clearChat() {
     document.getElementById("chatbox").innerHTML = "";
 }
+document.getElementById("chatInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendmessage();
+    }
+});
+function deletememory() {
+    fetch('http://localhost:5000/clear', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Memory cleared!");
+        document.getElementById("chatbox").innerHTML = "";
+    });
+}
+
 function displayHabits() {
     let habitDiv = document.getElementById("habits");
     habitDiv.innerHTML = "<h2>Your Habits</h2>";
@@ -73,6 +90,7 @@ function checkIn(index) {
         habits[index].last_checked = today;
         displayHabits();
     }
+    localStorage.setItem("habits", JSON.stringify(habits));
 }
 function addHabit() {
     let name = prompt("What's the habit name?");
@@ -91,7 +109,7 @@ function addHabit() {
     habits.push({name: name, streak: 0, last_checked:null})
     displayHabits();
     }
-    
+    localStorage.setItem("habits", JSON.stringify(habits));
 }
 function sendmessage() {
     let message = document.getElementById("chatInput").value;
@@ -117,10 +135,12 @@ function uncheck(index) {
         alert("You havent checked in today")
         displayHabits();
     }
+    localStorage.setItem("habits", JSON.stringify(habits));
 }
 function deleteHabit(index) {
     habits.splice(index, 1);
     displayHabits()
+    localStorage.setItem("habits", JSON.stringify(habits));
 }
 displayHabits();
 </script>
