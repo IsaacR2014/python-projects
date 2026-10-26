@@ -4,31 +4,37 @@
     <meta charset="UTF-8">
     <title>Alfred</title>
     <style>
+    :root {
+        --bg: #323437;
+        --text: white;
+        --accent: white;
+        --button-hover: #555;
+    } 
         body {
-    background-color: black;
-    color: white;
+    background-color: var(--bg);
+    color: var(--text);
     font-family: monospace;
     text-align: center;
 }
 button {
-    background-color: #333;
-    color: white;
-    border: 2px solid white;
+    background-color: var(--bg);
+    color: var(--text);
     padding: 10px 20px;
     font-size: 16px;
     margin: 10px;
     cursor: pointer;
+    border: none;
+    outline: none;
 }
 button:hover {
-    background-color: #555;
-    border-color: yellow;
+    background-color: var(--button-hover)
 }
 input {
     background-color: #333;
     color: white;
-    border: 2px solid white;
     padding: 10px;
     font-size: 16px;
+    border: none;
 }
     </style>
 </head>
@@ -49,10 +55,18 @@ input {
         <button onclick="sendmessage()">Send</button>
         <button onclick="clearChat()">Clear Chat</button>
         <button onclick="deletememory()">Delete Chat</button>
+        <button onclick="setTheme('serika')">Serika Dark</button>
         <div id="chatbox"></div>
     </div>
     <script>
-    
+    function setTheme(theme) {
+    if (theme === "serika") {
+        document.documentElement.style.setProperty('--bg', '#323437');
+        document.documentElement.style.setProperty('--text', '#e2b714');
+        document.documentElement.style.setProperty('--accent', '#e2b714');
+        document.documentElement.style.setProperty('--button-hover', '#444');
+    }
+}
     let habits = JSON.parse(localStorage.getItem("habits")) || [];
 
     function clearChat() {
@@ -78,8 +92,8 @@ function displayHabits() {
     let habitDiv = document.getElementById("habits");
     habitDiv.innerHTML = "<h2>Your Habits</h2>";
     for (let habit of habits) {
-        habitDiv.innerHTML += `<p>${habit.name} - 🔥 ${habit.streak} day streak <button onclick="checkIn(${habits.indexOf(habit)})">Check In</button> <button onclick="deleteHabit(${habits.indexOf(habit)})">Delete</button> <button onclick="uncheck(${habits.indexOf(habit)})">uncheck</button></p>`;
-    }
+        habitDiv.innerHTML += `<p>${habit.name} - 🔥 ${habit.streak}${habit.goal ? '/' + habit.goal : ''} day streak <button onclick="checkIn(${habits.indexOf(habit)})">Check In</button> <button onclick="deleteHabit(${habits.indexOf(habit)})">Delete</button> <button onclick="uncheck(${habits.indexOf(habit)})">uncheck</button></p>`;
+   }
 }
 function checkIn(index) {
     let today = new Date().toISOString().split('T')[0];
@@ -106,7 +120,8 @@ function addHabit() {
     alert("Name too long! Max 100 characters.");
 }
     else{
-    habits.push({name: name, streak: 0, last_checked:null})
+    let goal = askGoal();
+    habits.push({name: name, streak: 0, last_checked:null, goal: goal})
     displayHabits();
     }
     localStorage.setItem("habits", JSON.stringify(habits));
@@ -141,6 +156,17 @@ function deleteHabit(index) {
     habits.splice(index, 1);
     displayHabits()
     localStorage.setItem("habits", JSON.stringify(habits));
+}
+function askGoal() {
+    let goal = prompt("Set a goal? Enter number of days or leave blank to skip");
+    if (!goal) return null; // chicken jockey
+    if (isNaN(goal)) {
+    alert("Invlaid numbers only!")
+    return null;
+    }
+    else {
+    return goal;
+    } 
 }
 displayHabits();
 </script>
