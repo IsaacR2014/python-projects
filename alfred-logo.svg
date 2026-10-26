@@ -1,0 +1,65 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Alfred logo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#23242b"/>
+      <stop offset="1" stop-color="#0d0e12"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.26" r="0.78">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4cf3a"/>
+      <stop offset="1" stop-color="#c79b10"/>
+    </linearGradient>
+    <linearGradient id="plasma" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#06b6d4"/>
+      <stop offset="0.45" stop-color="#38bdf8"/>
+      <stop offset="0.8" stop-color="#a5f3fc"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <!-- app icon background -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#glow)"/>
+  <rect x="16.5" y="16.5" width="479" height="479" rx="107.5" fill="none" stroke="#38bdf8" stroke-opacity="0.22" stroke-width="1"/>
+
+  <!-- AI energy flame -->
+  <g>
+    <!-- outer glow -->
+    <path d="M256,40 C272,74 284,88 276,112 C270,126 260,130 256,132 C252,130 242,126 236,112 C228,88 240,74 256,40 Z"
+          fill="#22d3ee" opacity="0.55" filter="url(#soft)"/>
+    <!-- plasma body -->
+    <path d="M256,40 C272,74 284,88 276,112 C270,126 260,130 256,132 C252,130 242,126 236,112 C228,88 240,74 256,40 Z"
+          fill="url(#plasma)"/>
+    <!-- bright core -->
+    <path d="M256,62 C265,84 272,94 267,110 C263,120 258,124 256,126 C254,124 249,120 245,110 C240,94 247,84 256,62 Z"
+          fill="url(#core)"/>
+    <!-- rising spark particles -->
+    <path d="M256,16 l5,7 l-5,7 l-5,-7 Z" fill="#a5f3fc" opacity="0.95"/>
+    <path d="M233,30 l3.5,5 l-3.5,5 l-3.5,-5 Z" fill="#7dd3fc" opacity="0.65"/>
+    <path d="M280,24 l3.5,5 l-3.5,5 l-3.5,-5 Z" fill="#7dd3fc" opacity="0.6"/>
+    <circle cx="271" cy="12" r="2.4" fill="#e0f7ff" opacity="0.8"/>
+  </g>
+
+  <!-- the A (two legs) -->
+  <g fill="none" stroke="url(#gold)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="256" y1="138" x2="150" y2="406"/>
+    <line x1="256" y1="138" x2="362" y2="406"/>
+  </g>
+
+  <!-- bow tie as the crossbar -->
+  <g>
+    <path d="M188,284 L188,332 L250,308 Z" fill="url(#gold)"/>
+    <path d="M324,284 L324,332 L262,308 Z" fill="url(#gold)"/>
+    <rect x="248" y="294" width="16" height="28" rx="4" fill="#9c7a0a"/>
+  </g>
+</svg>
